@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/*
+ * EduFlow theme — one palette for the whole app.
+ *
+ * A single deep-forest brand hue on warm white. Every tint below is derived
+ * from that one hue, so panels, chips and placeholders read as one system.
+ * Material Web components read the --md-sys-color-* names, so those are
+ * mapped onto these same tokens further down instead of shipping Material's
+ * default purple scheme.
+ */
+@theme {
+  --color-brand: #003730;
+  --color-brand-hover: #0d5c4e;
+  --color-on-brand: #ffffff;
+  --color-brand-soft: #e4f0ea;
+  --color-brand-softer: #f1f7f4;
+
+  --color-ink: #101614;
+  --color-ink-muted: #5a6b66;
+
+  --color-surface: #ffffff;
+  --color-line: #dce7e2;
+
+  --color-danger: #b3261e;
+  --color-on-danger: #ffffff;
+
+  --font-sans: "Poppins", "Roboto", system-ui, sans-serif;
+  --font-display: "Poppins", "Roboto", system-ui, sans-serif;
+}
+
+/* Material Web components, driven by the same tokens. */
+:root {
+  --md-sys-color-primary: var(--color-brand);
+  --md-sys-color-on-primary: var(--color-on-brand);
+  --md-sys-color-primary-container: var(--color-brand-soft);
+  --md-sys-color-on-primary-container: var(--color-brand);
+  --md-sys-color-secondary: var(--color-ink-muted);
+  --md-sys-color-on-secondary: var(--color-on-brand);
+  --md-sys-color-secondary-container: var(--color-brand-soft);
+  --md-sys-color-on-secondary-container: var(--color-ink);
+  --md-sys-color-tertiary: var(--color-brand-hover);
+  --md-sys-color-on-tertiary: var(--color-on-brand);
+  --md-sys-color-tertiary-container: var(--color-brand-soft);
+  --md-sys-color-on-tertiary-container: var(--color-brand);
+
+  --md-sys-color-error: var(--color-danger);
+  --md-sys-color-on-error: var(--color-on-danger);
+  --md-sys-color-error-container: #f8e3e1;
+  --md-sys-color-on-error-container: #5c1712;
+
+  --md-sys-color-background: var(--color-brand-softer);
+  --md-sys-color-on-background: var(--color-ink);
+  --md-sys-color-surface: var(--color-surface);
+  --md-sys-color-on-surface: var(--color-ink);
+  --md-sys-color-surface-variant: var(--color-brand-soft);
+  --md-sys-color-on-surface-variant: var(--color-ink-muted);
+  --md-sys-color-surface-container: var(--color-brand-softer);
+  --md-sys-color-surface-container-high: var(--color-brand-soft);
+  --md-sys-color-surface-container-highest: var(--color-brand-soft);
+  --md-sys-color-surface-container-low: var(--color-surface);
+  --md-sys-color-surface-container-lowest: var(--color-surface);
+
+  --md-sys-color-outline: var(--color-ink-muted);
+  --md-sys-color-outline-variant: var(--color-line);
+  --md-sys-color-inverse-surface: var(--color-ink);
+  --md-sys-color-inverse-on-surface: var(--color-brand-softer);
+  --md-sys-color-inverse-primary: var(--color-brand-soft);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
