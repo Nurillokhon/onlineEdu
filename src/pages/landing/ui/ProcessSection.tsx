@@ -2,13 +2,21 @@
 
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { containerClass } from "./container";
+import Step1 from "@/shared/assets/step1.png";
+import Step2 from "@/shared/assets/step2.png";
+import Step3 from "@/shared/assets/step3.png";
 
 const steps = [
-  { number: 1, title: "O'zingizga mos masterklassni tanlaysiz" },
-  { number: 2, title: "Berilgan darslarni o'rganib, vazifalarni bajarasiz." },
+  { number: 1, title: "O'zingizga mos masterklassni tanlaysiz", img: Step1 },
+  {
+    number: 2,
+    title: "Berilgan darslarni o'rganib, vazifalarni bajarasiz.",
+    img: Step2,
+  },
   {
     number: 3,
     title: "Amaliy mashg'ulotlarda qatnashing, sertifikatga ega bo'ling.",
+    img: Step3,
   },
 ];
 
@@ -39,7 +47,8 @@ export function ProcessSection() {
               </div>
               <ImagePlaceholder
                 alt={step.title}
-                className="w-full aspect-4/3 rounded-xl mt-auto"
+                className="w-full rounded-xl mt-auto object-cover"
+                src={step.img}
               />
             </div>
           ))}
