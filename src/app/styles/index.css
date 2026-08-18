@@ -13,14 +13,25 @@
   --color-brand: #003730;
   --color-brand-hover: #0d5c4e;
   --color-on-brand: #ffffff;
-  --color-brand-soft: #e4f0ea;
-  --color-brand-softer: #f1f7f4;
+  --color-brand-soft: #ddeee6;
+  --color-brand-softer: #eaf4f0;
 
   --color-ink: #101614;
   --color-ink-muted: #5a6b66;
 
   --color-surface: #ffffff;
+  /* Cards sit on the tinted panels, so they are an off-white carrying the
+     same green undertone rather than pure white. */
+  --color-card: #fbfdfc;
   --color-line: #dce7e2;
+
+  /* Section panel gradients, sampled from the reference design. */
+  --color-hero-from: #f2eafc;
+  --color-hero-to: #e3f4ea;
+  --color-process-from: #ede6fa;
+  --color-process-to: #dcf3e4;
+  --color-stats-from: #dce9fb;
+  --color-stats-to: #e8e2f8;
 
   --color-danger: #b3261e;
   --color-on-danger: #ffffff;

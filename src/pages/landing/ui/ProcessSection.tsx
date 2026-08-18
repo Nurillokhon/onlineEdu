@@ -23,7 +23,7 @@ const steps = [
 export function ProcessSection() {
   return (
     <section className={`${containerClass} mt-6`}>
-      <div className="rounded-3xl bg-linear-to-br from-brand-soft to-brand-softer px-6 sm:px-12 py-12 sm:py-16">
+      <div className="rounded-3xl bg-linear-to-b from-process-from to-process-to px-6 sm:px-12 py-12 sm:py-16">
         <div className="text-center max-w-xl mx-auto mb-10">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink">
             O'rganish jarayoni qanday kechadi?
@@ -37,7 +37,7 @@ export function ProcessSection() {
           {steps.map((step) => (
             <div
               key={step.number}
-              className="bg-surface rounded-2xl p-5 flex flex-col gap-4"
+              className="bg-card rounded-2xl p-5 flex flex-col gap-4"
             >
               <div className="flex items-start gap-3">
                 <span className="shrink-0 w-7 h-7 rounded-full bg-brand text-on-brand text-sm font-medium flex items-center justify-center">

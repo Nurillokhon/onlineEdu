@@ -6,14 +6,16 @@ import { paths } from "@/shared/config/routes";
 import { ArrowRightIcon, BoltIcon } from "./icons";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { containerClass } from "./container";
+import dataSince from "@/shared/assets/dataScience.png";
+import frontend from "@/shared/assets/frontend.png";
+import tizimDizayni from "@/shared/assets/tizimDizayni.png";
+import uxuiDizayn from "@/shared/assets/uxuiDizayn.png";
 
 interface Slide {
-  /** Leading phrase of the headline, shown in the brand colour. */
   accent: string;
   title: string;
   description: string;
   badge: string;
-  /** Drop a course image here; falls back to a placeholder while empty. */
   image?: string;
 }
 
@@ -24,6 +26,7 @@ const slides: Slide[] = [
     description:
       "Professional darajadagi ta'lim platformasi orqali o'z bilimingizni oshiring. Bizning ekspertlar jamoasi sizga eng zamonaviy bilimlarni ulashishadi.",
     badge: "Yangi kurs",
+    image: tizimDizayni,
   },
   {
     accent: "Frontend",
@@ -31,6 +34,7 @@ const slides: Slide[] = [
     description:
       "React, TypeScript va zamonaviy interfeys arxitekturasi. Har bir mavzudan keyin amaliy loyiha topshirasiz va mentordan izoh olasiz.",
     badge: "Eng ommabop",
+    image: frontend,
   },
   {
     accent: "Data Science",
@@ -38,6 +42,7 @@ const slides: Slide[] = [
     description:
       "Python, ma'lumotlarni tahlil qilish va mashinali o'qitish. Real ma'lumotlar to'plamlari bilan ishlab, portfolio yig'asiz.",
     badge: "Guruh to'lmoqda",
+    image: dataSince,
   },
   {
     accent: "UX/UI Dizayn",
@@ -45,6 +50,7 @@ const slides: Slide[] = [
     description:
       "Foydalanuvchi tadqiqotidan tayyor interfeysgacha. Figma'da ishlash, dizayn tizimi tuzish va portfolio himoyasi bir kursda.",
     badge: "Amaliyot bilan",
+    image: uxuiDizayn,
   },
 ];
 
@@ -85,7 +91,7 @@ export function Hero() {
         onMouseLeave={() => setPaused(false)}
         onFocusCapture={() => setPaused(true)}
         onBlurCapture={() => setPaused(false)}
-        className="rounded-3xl bg-linear-to-br from-brand-soft to-brand-softer px-6 sm:px-12 py-12 sm:py-16"
+        className="rounded-3xl bg-linear-to-br from-hero-from to-hero-to px-6 sm:px-12 py-12 sm:py-16"
       >
         <div className="overflow-hidden -my-6 py-6">
           <div
@@ -94,14 +100,11 @@ export function Hero() {
             style={{ transform: `translateX(-${active * 100}%)` }}
           >
             {slides.map((slide, index) => {
-              // Only the visible slide carries the page's h1.
               const Heading = index === active ? "h1" : "h2";
               return (
                 <div
                   key={slide.accent}
                   aria-hidden={index !== active}
-                  // min-w-0 stops a long word (flex min-width: auto) from
-                  // stretching the slide past the track width.
                   className="w-full min-w-0 shrink-0 grid md:grid-cols-2 gap-10 items-center"
                 >
                   <div className="flex flex-col gap-6">
@@ -128,7 +131,7 @@ export function Hero() {
                     <ImagePlaceholder
                       src={slide.image}
                       alt={`${slide.accent} kursi`}
-                      className="w-full aspect-4/3 rounded-2xl shadow-xl"
+                      className="w-full object-cover rounded-2xl shadow-xl"
                     />
                     <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand text-on-brand text-xs font-medium">
                       <BoltIcon />
