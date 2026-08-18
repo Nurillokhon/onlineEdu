@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { loginRequest, registerRequest, fetchProfileStats } from './requests'
-import type { LoginPayload, RegisterPayload } from './requests'
+import { loginRequest, registerRequest, fetchProfileStats, lookupCitizenRequest } from './requests'
+import type { CitizenLookupPayload, LoginPayload, RegisterPayload } from './requests'
 
 export function useLoginMutation() {
   return useMutation({
@@ -11,6 +11,12 @@ export function useLoginMutation() {
 export function useRegisterMutation() {
   return useMutation({
     mutationFn: (payload: RegisterPayload) => registerRequest(payload),
+  })
+}
+
+export function useCitizenLookupMutation() {
+  return useMutation({
+    mutationFn: (payload: CitizenLookupPayload) => lookupCitizenRequest(payload),
   })
 }
 

@@ -6,8 +6,9 @@ import { DashboardPage } from "@/pages/dashboard";
 import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";
 import { ProfilePage } from "@/pages/profile";
+import { CoursesPage } from "@/pages/courses";
 import { NotFoundPage } from "@/pages/not-found";
-import { Navbar } from "@/widgets/navbar";
+import { AppShell } from "@/widgets/app-shell";
 import { AuthLayout } from "@/widgets/auth-layout";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
@@ -49,9 +50,10 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorFallback />,
     children: [
       {
-        element: <Navbar />,
+        element: <AppShell />,
         children: [
           { path: paths.dashboard, element: <DashboardPage /> },
+          { path: paths.courses, element: <CoursesPage /> },
           { path: paths.profile, element: <ProfilePage /> },
         ],
       },

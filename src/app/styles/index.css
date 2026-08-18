@@ -1,14 +1,6 @@
 @import "tailwindcss";
 
-/*
- * EduFlow theme — one palette for the whole app.
- *
- * A single deep-forest brand hue on warm white. Every tint below is derived
- * from that one hue, so panels, chips and placeholders read as one system.
- * Material Web components read the --md-sys-color-* names, so those are
- * mapped onto these same tokens further down instead of shipping Material's
- * default purple scheme.
- */
+
 @theme {
   --color-brand: #003730;
   --color-brand-hover: #0d5c4e;
@@ -35,6 +27,14 @@
 
   --color-danger: #b3261e;
   --color-on-danger: #ffffff;
+  /* Soft surfaces for inline notices, tinted from the palette above. */
+  --color-info-soft: #dce9fb;
+  --color-danger-soft: #fdecea;
+
+  /* Material 3 window size classes, used for the adaptive app shell. */
+  --breakpoint-medium: 600px;
+  --breakpoint-expanded: 840px;
+  --breakpoint-large: 1200px;
 
   --font-sans: "Poppins", "Roboto", system-ui, sans-serif;
   --font-display: "Poppins", "Roboto", system-ui, sans-serif;
@@ -72,11 +72,40 @@
   --md-sys-color-surface-container-low: var(--color-surface);
   --md-sys-color-surface-container-lowest: var(--color-surface);
 
-  --md-sys-color-outline: var(--color-ink-muted);
+  --md-sys-color-outline: var(--color-line);
   --md-sys-color-outline-variant: var(--color-line);
   --md-sys-color-inverse-surface: var(--color-ink);
   --md-sys-color-inverse-on-surface: var(--color-brand-softer);
   --md-sys-color-inverse-primary: var(--color-brand-soft);
+}
+
+/* Material text fields wear the same hairline and radius as the cards around
+   them; only the focus state departs from it. */
+md-outlined-text-field {
+  --md-outlined-text-field-outline-color: var(--color-line);
+  --md-outlined-text-field-hover-outline-color: var(--color-line);
+  --md-outlined-text-field-disabled-outline-color: var(--color-line);
+  --md-outlined-text-field-outline-width: 1px;
+  --md-outlined-text-field-container-shape: 0.75rem;
+  --md-outlined-text-field-error-outline-color: var(--color-danger);
+  --md-outlined-text-field-error-hover-outline-color: var(--color-danger);
+  --md-outlined-text-field-focus-outline-color: var(--color-brand-hover);
+  --md-outlined-text-field-focus-outline-width: 2px;
+  --md-outlined-text-field-focus-label-text-color: var(--color-brand-hover);
+  --md-outlined-text-field-caret-color: var(--color-brand-hover);
+}
+
+/* The rail's FAB carries the brand fill rather than the pale container tone. */
+md-fab {
+  --md-fab-container-color: var(--color-brand);
+  --md-fab-icon-color: var(--color-on-brand);
+  --md-fab-hover-icon-color: var(--color-on-brand);
+  --md-fab-focus-icon-color: var(--color-on-brand);
+  --md-fab-pressed-icon-color: var(--color-on-brand);
+  --md-fab-label-text-color: var(--color-on-brand);
+  --md-fab-hover-label-text-color: var(--color-on-brand);
+  --md-fab-focus-label-text-color: var(--color-on-brand);
+  --md-fab-pressed-label-text-color: var(--color-on-brand);
 }
 
 body {
@@ -86,6 +115,6 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-brand);
+  outline: 2px solid var(--color-brand-hover);
   outline-offset: 2px;
 }
