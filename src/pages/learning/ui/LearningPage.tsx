@@ -25,7 +25,7 @@ export function LearningPage() {
           >
             <div>
               <p className="font-medium text-ink">{course.title}</p>
-              <p className="text-ink-muted text-sm">{course.mentor}</p>
+              <p className="text-ink-muted text-sm">{course.mentor.name}</p>
             </div>
 
             <div className="flex flex-col gap-2 mt-auto">
@@ -66,7 +66,7 @@ export function LearningPage() {
               >
                 <div>
                   <p className="text-ink">{course.title}</p>
-                  <p className="text-ink-muted text-sm">{course.mentor}</p>
+                  <p className="text-ink-muted text-sm">{course.mentor.name}</p>
                 </div>
                 <Link
                   to={paths.courses}

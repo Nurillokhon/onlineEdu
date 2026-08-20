@@ -312,3 +312,77 @@ export function UsersIcon({ size = 18 }: IconProps) {
     </svg>
   )
 }
+
+export function BookmarkIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <path d="M6 4h12v17l-6-4.5L6 21z" />
+    </svg>
+  )
+}
+
+export function BookmarkFilledIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <path d="M6 4h12v17l-6-4.5L6 21z" fill="currentColor" />
+    </svg>
+  )
+}
+
+export function ModulesIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <line x1="9" y1="4" x2="9" y2="20" />
+    </svg>
+  )
+}
+
+export function ChevronDownIcon({ size = 20 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  )
+}
+
+export function CheckCircleIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <circle cx="12" cy="12" r="9" />
+      <polyline points="8.5 12 11 14.5 15.5 9.5" />
+    </svg>
+  )
+}
+
+export function InfoIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <circle cx="12" cy="12" r="9" />
+      <line x1="12" y1="11" x2="12" y2="16" />
+      <line x1="12" y1="8" x2="12" y2="8" />
+    </svg>
+  )
+}
+
+export function MonitorIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <line x1="8" y1="20" x2="16" y2="20" />
+      <line x1="12" y1="16" x2="12" y2="20" />
+    </svg>
+  )
+}
+
+export function StarIcon({ size = 16 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <polygon
+        points="12 3 14.7 9.1 21 9.8 16.3 14.1 17.6 20.5 12 17.3 6.4 20.5 7.7 14.1 3 9.8 9.3 9.1"
+        fill="currentColor"
+        stroke="none"
+      />
+    </svg>
+  )
+}

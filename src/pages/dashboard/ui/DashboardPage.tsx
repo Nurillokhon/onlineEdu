@@ -55,7 +55,7 @@ export function DashboardPage() {
             >
               <div className="flex flex-col gap-1">
                 <p className="font-medium text-ink">{course.title}</p>
-                <p className="text-ink-muted text-sm">{course.mentor}</p>
+                <p className="text-ink-muted text-sm">{course.mentor.name}</p>
               </div>
 
               <div className="flex flex-col gap-2 mt-auto">

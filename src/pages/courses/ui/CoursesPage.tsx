@@ -22,7 +22,7 @@ export function CoursesPage() {
       const matchesQuery =
         needle === '' ||
         course.title.toLowerCase().includes(needle) ||
-        course.mentor.toLowerCase().includes(needle) ||
+        course.mentor.name.toLowerCase().includes(needle) ||
         course.category.toLowerCase().includes(needle)
       return matchesCategory && matchesQuery
     })
