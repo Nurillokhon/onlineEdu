@@ -20,8 +20,14 @@ function Fact({ icon, children }: { icon: ReactNode; children: ReactNode }) {
   )
 }
 
+interface CourseHeroProps {
+  course: Course
+  /** Opens the application form further down the page. */
+  onApply: () => void
+}
+
 /** Enrolment header: what the course is, what it costs in time, and how to join. */
-export function CourseHero({ course }: { course: Course }) {
+export function CourseHero({ course, onApply }: CourseHeroProps) {
   const { isSaved, toggle } = useSavedCourses()
   const saved = isSaved(course.id)
 
@@ -58,6 +64,7 @@ export function CourseHero({ course }: { course: Course }) {
           <div className="flex flex-wrap gap-3">
             <button
               type="button"
+              onClick={onApply}
               className="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3 font-medium text-on-brand transition-colors hover:bg-brand-hover"
             >
               <PlayIcon size={16} />

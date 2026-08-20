@@ -386,3 +386,44 @@ export function StarIcon({ size = 16 }: IconProps) {
     </svg>
   )
 }
+
+export function ArrowRightIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <line x1="4" y1="12" x2="19" y2="12" />
+      <polyline points="13 6 19 12 13 18" />
+    </svg>
+  )
+}
+
+export function DiplomaIcon({ size = 20 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <path d="M5 3h9l5 5v6H5z" />
+      <polyline points="14 3 14 8 19 8" />
+      <circle cx="12" cy="18" r="3" />
+      <polyline points="10.4 20.4 10 22.5 12 21.5 14 22.5 13.6 20.4" />
+    </svg>
+  )
+}
+
+export function BriefcaseIcon({ size = 20 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+    </svg>
+  )
+}
+
+export function UploadIcon({ size = 20 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <path d="M5 3h9l5 5v13H5z" />
+      <polyline points="14 3 14 8 19 8" />
+      <line x1="12" y1="18" x2="12" y2="11" />
+      <polyline points="9 14 12 11 15 14" />
+    </svg>
+  )
+}

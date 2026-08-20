@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { courses, type Course } from '@/entities/course'
+import { ApplicationForm } from '@/features/submit-application'
 import { paths } from '@/shared/config/routes'
 import { useSearchParamState } from '@/shared/lib'
 import { CourseCurriculum } from './detail/CourseCurriculum'
@@ -11,6 +12,7 @@ import { CourseSidebar } from './detail/CourseSidebar'
 import { CourseTabs, type Tab } from './detail/CourseTabs'
 
 const ABOUT = 'about'
+const APPLYING = '1'
 
 function Breadcrumb({ course }: { course: Course }) {
   return (
@@ -71,13 +73,25 @@ export function CourseDetailPage() {
     fallback: ABOUT,
     allowed: tabs.map((tab) => tab.id),
   })
+  // The form opens in place on this page rather than on a route of its own, so
+  // the back button closes it and the chosen tab is still there underneath.
+  const [applying, setApplying] = useSearchParamState('apply', { allowed: [APPLYING] })
 
   if (!course) return <NotFound />
+
+  if (applying === APPLYING) {
+    return (
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
+        <Breadcrumb course={course} />
+        <ApplicationForm course={course} onCancel={() => setApplying('')} />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-5">
       <Breadcrumb course={course} />
-      <CourseHero course={course} />
+      <CourseHero course={course} onApply={() => setApplying(APPLYING)} />
 
       <div className="grid gap-6 large:grid-cols-[minmax(0,1fr)_minmax(0,320px)] large:items-start">
         <div className="flex flex-col gap-6">
