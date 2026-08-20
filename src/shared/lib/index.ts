@@ -3,3 +3,5 @@ export { toPinfl, isPinflComplete, toPassport, isPassportComplete } from './iden
 export { passwordStrength } from './password'
 export type { PasswordStrength } from './password'
 export { useCaptcha } from './useCaptcha'
+export { usePersistentState } from './usePersistentState'
+export { useSearchParamState, useClearSearchParams } from './useSearchParamState'

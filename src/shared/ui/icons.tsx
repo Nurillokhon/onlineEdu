@@ -221,3 +221,94 @@ export function CloseIcon({ size = 22 }: IconProps) {
     </svg>
   )
 }
+
+/** Filled counterparts used by the sidebar menu, matching its solid glyph style. */
+export function HomeFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M11.3 2.3a1 1 0 0 1 1.4 0l8 7A1 1 0 0 1 21 10v9a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2v-9a1 1 0 0 1 .3-.7z" />
+    </svg>
+  )
+}
+
+export function BookFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M6.5 2H20a1 1 0 0 1 1 1v13H6.5a1.5 1.5 0 0 0 0 3H21v2a1 1 0 0 1-1 1H6.5A3.5 3.5 0 0 1 3 18.5v-13A3.5 3.5 0 0 1 6.5 2z" />
+    </svg>
+  )
+}
+
+export function PersonFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M12 14c-4.4 0-8 2-8 6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1c0-4-3.6-6-8-6z" />
+    </svg>
+  )
+}
+
+export function GridFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <rect x="3" y="3" width="8" height="8" rx="2" />
+      <rect x="13" y="3" width="8" height="8" rx="2" />
+      <rect x="3" y="13" width="8" height="8" rx="2" />
+      <rect x="13" y="13" width="8" height="8" rx="2" />
+    </svg>
+  )
+}
+
+export function GraduationFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M11.6 2.1a1 1 0 0 1 .8 0l9 4a1 1 0 0 1 0 1.8l-9 4a1 1 0 0 1-.8 0l-9-4a1 1 0 0 1 0-1.8z" />
+      <path d="M6 12.2v3.6c0 .6.3 1.1.8 1.4 1.5.9 3.4 1.3 5.2 1.3s3.7-.4 5.2-1.3c.5-.3.8-.8.8-1.4v-3.6l-5.6 2.5a2 2 0 0 1-1.6 0z" />
+    </svg>
+  )
+}
+
+export function DocumentFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5z" />
+    </svg>
+  )
+}
+
+export function WalletFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4 5h13a2 2 0 0 1 2 2v1h-3a3 3 0 0 0 0 6h3v3a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+      <path d="M16 9.5h5a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5a2 2 0 0 1 0-4z" />
+    </svg>
+  )
+}
+
+export function SettingsFilledIcon({ size = 22 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M10.3 2h3.4l.4 2.3 1.6.9 2.2-.9 1.7 3-1.7 1.6v1.9l1.7 1.6-1.7 3-2.2-.9-1.6.9-.4 2.3h-3.4l-.4-2.3-1.6-.9-2.2.9-1.7-3 1.7-1.6v-1.9L4.4 7.3l1.7-3 2.2.9 1.6-.9zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+    </svg>
+  )
+}
+
+export function SearchIcon({ size = 20 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <circle cx="11" cy="11" r="7" />
+      <line x1="16.5" y1="16.5" x2="21" y2="21" />
+    </svg>
+  )
+}
+
+export function UsersIcon({ size = 18 }: IconProps) {
+  return (
+    <svg {...icon(size)}>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+      <path d="M16.5 4.8a3.5 3.5 0 0 1 0 6.4" />
+      <path d="M18 14.4a6.5 6.5 0 0 1 3.5 5.6" />
+    </svg>
+  )
+}

@@ -18,7 +18,6 @@ export function AppShell() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Esc closes the overlay, matching the modal drawer behaviour.
   useEffect(() => {
     if (!expanded) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -30,21 +29,17 @@ export function AppShell() {
 
   function handleLogout() {
     logout();
-    // Prevent cross-user data-bleed: cached query results are not scoped per
-    // user, so the next account must not see them.
     queryClient.clear();
     navigate(paths.login, { replace: true });
   }
 
   return (
     <div className="min-h-screen flex bg-surface text-ink">
-      {/* Inline rail: keeps its own column so content never sits underneath. */}
       <div className="hidden medium:block shrink-0 sticky top-0 h-screen">
         <Sidebar
           expanded={expanded}
           onToggle={() => setExpanded((open) => !open)}
           onNavigate={() => undefined}
-          onPrimaryAction={() => navigate(paths.courses)}
           onLogout={handleLogout}
         />
       </div>
@@ -55,7 +50,6 @@ export function AppShell() {
           expanded={false}
           onToggle={() => setExpanded(true)}
           onNavigate={() => undefined}
-          onPrimaryAction={() => navigate(paths.courses)}
           onLogout={handleLogout}
         />
       </div>
@@ -67,10 +61,6 @@ export function AppShell() {
               expanded
               onToggle={() => setExpanded(false)}
               onNavigate={() => setExpanded(false)}
-              onPrimaryAction={() => {
-                setExpanded(false);
-                navigate(paths.courses);
-              }}
               onLogout={handleLogout}
             />
           </div>
@@ -83,7 +73,6 @@ export function AppShell() {
         </div>
       ) : null}
 
-      {/* The content pane: an inset surface, outlined like the cards inside it. */}
       <main className="flex-1 min-w-0  mt-3  sm:mt-4 rounded-tl-2xl border border-line bg-brand-softer p-4 sm:p-6">
         <Outlet />
       </main>

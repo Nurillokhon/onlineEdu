@@ -133,7 +133,7 @@ export function RegisterForm() {
       {
         onSuccess: (user) => {
           login(user);
-          navigate(paths.dashboard, { replace: true });
+          navigate(paths.courses, { replace: true });
         },
         onError: () => {
           setFormError(

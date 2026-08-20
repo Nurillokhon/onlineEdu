@@ -1,150 +1,105 @@
-import { useState } from "react";
-import { courses } from "@/entities/course";
-import type { Course } from "@/entities/course";
-import { ArrowLeftIcon, ClockIcon, PlayIcon } from "@/shared/ui";
+import { useMemo } from 'react'
+import { CourseCard, courseCategories, courses } from '@/entities/course'
+import { courseDetailPath } from '@/shared/config/routes'
+import { useClearSearchParams, useSearchParamState } from '@/shared/lib'
+import { SearchIcon } from '@/shared/ui'
 
-function ProgressBar({ value }: { value: number }) {
-  return (
-    <div
-      className="h-1.5 rounded-full bg-line overflow-hidden"
-      role="progressbar"
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={value}
-    >
-      <span
-        className="block h-full rounded-full bg-brand"
-        style={{ width: `${value}%` }}
-      />
-    </div>
-  );
-}
+const ALL = 'Barchasi'
 
-function CourseDetail({ course }: { course: Course }) {
-  return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <h2 className="font-display text-2xl font-bold text-ink">
-          {course.title}
-        </h2>
-        <p className="text-ink-muted text-sm">{course.mentor}</p>
-      </div>
-
-      <p className="text-ink-muted">{course.summary}</p>
-
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-ink-muted">Kurs o'zlashtirildi</span>
-          <span className="font-medium text-ink">{course.progress}%</span>
-        </div>
-        <ProgressBar value={course.progress} />
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {course.topics.map((topic) => (
-          <span
-            key={topic}
-            className="px-3 py-1.5 rounded-full bg-brand-soft text-brand text-sm"
-          >
-            {topic}
-          </span>
-        ))}
-      </div>
-
-      <dl className="grid grid-cols-2 gap-4">
-        <div className="rounded-xl bg-brand-softer px-4 py-3">
-          <dt className="text-ink-muted text-sm">Darslar</dt>
-          <dd className="text-ink text-xl font-semibold">{course.lessons}</dd>
-        </div>
-        <div className="rounded-xl bg-brand-softer px-4 py-3">
-          <dt className="text-ink-muted text-sm">Soatlar</dt>
-          <dd className="text-ink text-xl font-semibold">{course.hours}</dd>
-        </div>
-      </dl>
-    </div>
-  );
-}
-
-/**
- * Material 3 list-detail canonical layout: the two panes sit side by side once
- * the window is expanded, and stack into one navigable pane below that.
- */
+/** Course catalogue: a searchable, filterable grid driven by the query string. */
 export function CoursesPage() {
-  const [selectedId, setSelectedId] = useState(courses[0].id);
-  const selected =
-    courses.find((course) => course.id === selectedId) ?? courses[0];
-  const [detailOpen, setDetailOpen] = useState(false);
+  const [category, setCategory] = useSearchParamState('category', {
+    fallback: ALL,
+    allowed: courseCategories,
+  })
+  const [query, setQuery] = useSearchParamState('q')
+  const clearFilters = useClearSearchParams()
+
+  const visible = useMemo(() => {
+    const needle = query.trim().toLowerCase()
+    return courses.filter((course) => {
+      const matchesCategory = category === ALL || course.category === category
+      const matchesQuery =
+        needle === '' ||
+        course.title.toLowerCase().includes(needle) ||
+        course.mentor.toLowerCase().includes(needle) ||
+        course.category.toLowerCase().includes(needle)
+      return matchesCategory && matchesQuery
+    })
+  }, [query, category])
 
   return (
-    <div className="flex flex-col gap-5">
-      <h1 className="font-display text-2xl font-bold text-ink">Kurslarim</h1>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4 medium:flex-row medium:items-end medium:justify-between">
+        <div className="flex flex-col gap-1">
+          <h1 className="font-display text-3xl font-bold text-ink">Barcha kurslar</h1>
+          <p className="text-ink-muted">
+            O'z malakangizni oshirish uchun eng yaxshi kurslarni tanlang.
+          </p>
+        </div>
 
-      <div className="expanded:grid expanded:grid-cols-[minmax(0,360px)_minmax(0,1fr)] gap-6">
-        <section
-          aria-label="Kurslar ro'yxati"
-          className={`flex-col gap-3 ${detailOpen ? "hidden expanded:flex" : "flex"}`}
-        >
-          {courses.map((course) => {
-            const isSelected = course.id === selected.id;
-            return (
-              <button
-                key={course.id}
-                type="button"
-                onClick={() => {
-                  setSelectedId(course.id);
-                  setDetailOpen(true);
-                }}
-                aria-current={isSelected}
-                className={`text-left rounded-2xl border p-4 flex flex-col gap-3 transition-colors ${
-                  isSelected
-                    ? "border-brand bg-card expanded:bg-brand-soft"
-                    : "border-line bg-card hover:border-brand-hover"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-medium text-ink">{course.title}</p>
-                    <p className="text-ink-muted text-sm">{course.mentor}</p>
-                  </div>
-                  <span className="text-ink-muted text-sm flex items-center gap-1 shrink-0">
-                    <ClockIcon size={14} />
-                    {course.hours} soat
-                  </span>
-                </div>
-                <ProgressBar value={course.progress} />
-              </button>
-            );
-          })}
-        </section>
-
-        <section
-          aria-label="Kurs tafsilotlari"
-          className={`rounded-2xl bg-card border border-line p-5 sm:p-6 ${
-            detailOpen
-              ? "flex flex-col gap-4"
-              : "hidden expanded:flex expanded:flex-col"
-          }`}
-        >
-          <button
-            type="button"
-            onClick={() => setDetailOpen(false)}
-            className="expanded:hidden self-start inline-flex items-center gap-2 text-sm text-brand-hover"
-          >
-            <ArrowLeftIcon size={16} />
-            Ro'yxatga qaytish
-          </button>
-
-          <CourseDetail course={selected} />
-
-          <button
-            type="button"
-            className="mt-2 self-start inline-flex items-center gap-2 rounded-xl bg-brand text-on-brand font-medium px-5 py-3 hover:bg-brand-hover transition-colors"
-          >
-            <PlayIcon size={16} />
-            {selected.progress > 0 ? "Davom etish" : "Kursni boshlash"}
-          </button>
-        </section>
+        <div className="relative medium:w-72 large:w-80">
+          {/* Decorative: the input carries the accessible name. */}
+          <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-ink-muted">
+            <SearchIcon size={18} />
+          </span>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Kurslarni qidirish..."
+            aria-label="Kurslarni qidirish"
+            className="w-full rounded-full border border-line bg-surface py-3 pl-11 pr-4 text-sm text-ink placeholder:text-ink-muted focus:border-brand-hover focus:outline-none"
+          />
+        </div>
       </div>
+
+      <div
+        role="group"
+        aria-label="Kategoriya bo'yicha saralash"
+        className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+      >
+        {[ALL, ...courseCategories].map((name) => {
+          const active = name === category
+          return (
+            <button
+              key={name}
+              type="button"
+              onClick={() => setCategory(name)}
+              aria-pressed={active}
+              className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                active
+                  ? 'border-brand bg-brand text-on-brand'
+                  : 'border-line bg-surface text-ink hover:border-brand-hover'
+              }`}
+            >
+              {name}
+            </button>
+          )
+        })}
+      </div>
+
+      {visible.length > 0 ? (
+        <div className="grid grid-cols-1 gap-5 medium:grid-cols-2 expanded:grid-cols-3 large:grid-cols-4">
+          {visible.map((course) => (
+            <CourseCard key={course.id} course={course} to={courseDetailPath(course.id)} />
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-line bg-card p-10 text-center">
+          <p className="font-medium text-ink">Bu so'rov bo'yicha kurs topilmadi.</p>
+          <p className="mt-1 text-sm text-ink-muted">
+            Boshqa kalit so'zni kiriting yoki kategoriyani "Barchasi"ga qaytaring.
+          </p>
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="mt-4 rounded-xl bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover"
+          >
+            Filtrlarni tozalash
+          </button>
+        </div>
+      )}
     </div>
-  );
+  )
 }

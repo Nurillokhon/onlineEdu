@@ -4,5 +4,5 @@ import { paths } from '@/shared/config/routes'
 
 export function PublicRoute() {
   const { isAuthenticated } = useAuth()
-  return isAuthenticated ? <Navigate to={paths.dashboard} replace /> : <Outlet />
+  return isAuthenticated ? <Navigate to={paths.courses} replace /> : <Outlet />
 }

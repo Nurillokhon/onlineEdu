@@ -73,7 +73,7 @@ export function LoginForm() {
       {
         onSuccess: (user) => {
           login(user)
-          navigate(paths.dashboard, { replace: true })
+          navigate(paths.courses, { replace: true })
         },
         onError: () => {
           registerFailure("Telefon raqami yoki parol noto'g'ri.")
