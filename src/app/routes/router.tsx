@@ -6,7 +6,13 @@ import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";
 import { ProfilePage } from "@/pages/profile";
 import { CoursesPage, CourseDetailPage } from "@/pages/courses";
-import { LearningPage } from "@/pages/learning";
+import {
+  LearningPage,
+  LessonPage,
+  QuizPage,
+  QuizResultPage,
+  CourseSuspendedPage,
+} from "@/pages/learning";
 import { ApplicationsPage } from "@/pages/applications";
 import { PaymentsPage } from "@/pages/payments";
 import { SettingsPage } from "@/pages/settings";
@@ -62,6 +68,10 @@ export const router = createBrowserRouter([
           { path: paths.payments, element: <PaymentsPage /> },
           { path: paths.settings, element: <SettingsPage /> },
           { path: paths.profile, element: <ProfilePage /> },
+          { path: paths.courseSuspended, element: <CourseSuspendedPage /> },
+          { path: paths.quizResult, element: <QuizResultPage /> },
+          { path: paths.lessonQuiz, element: <QuizPage /> },
+          { path: paths.lesson, element: <LessonPage /> },
         ],
       },
     ],

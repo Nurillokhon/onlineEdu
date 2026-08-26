@@ -47,7 +47,7 @@ export function CourseCurriculum({ course }: { course: Course }) {
                 <span className="min-w-0 flex-1">
                   <span className="block font-semibold text-ink">{module.title}</span>
                   <span className="block text-sm text-ink-muted">
-                    {module.lessons} ta dars • {module.duration}
+                    {module.lessons.length} ta dars • {module.duration}
                   </span>
                 </span>
 
@@ -62,12 +62,12 @@ export function CourseCurriculum({ course }: { course: Course }) {
 
               <div id={panelId} hidden={!open} className="border-t border-line px-4 py-3">
                 <ol className="flex flex-col gap-2">
-                  {module.topics.map((topic, topicIndex) => (
-                    <li key={topic} className="flex items-center gap-3 text-sm text-ink-muted">
+                  {module.lessons.map((lesson, lessonIndex) => (
+                    <li key={lesson.id} className="flex items-center gap-3 text-sm text-ink-muted">
                       <span className="w-6 shrink-0 tabular-nums text-right text-xs">
-                        {topicIndex + 1}.
+                        {lessonIndex + 1}.
                       </span>
-                      {topic}
+                      {lesson.title}
                     </li>
                   ))}
                 </ol>

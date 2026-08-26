@@ -1,3 +1,4 @@
+import { buildLessons, type Lesson } from './lesson'
 import dataScienceCover from '@/shared/assets/dataScience.png'
 import frontendCover from '@/shared/assets/frontend.png'
 import systemDesignCover from '@/shared/assets/tizimDizayni.png'
@@ -11,11 +12,11 @@ export interface Mentor {
 
 export interface CurriculumModule {
   title: string
-  lessons: number
   /** Human-readable, e.g. "1 soat 15 daqiqa". */
   duration: string
-  /** Lesson titles, revealed when the module is expanded. */
-  topics: string[]
+  lessons: Lesson[]
+  /** The module exam that gates the next module. */
+  examId: string
 }
 
 export interface Requirement {
@@ -43,8 +44,6 @@ export interface Course {
   videoUrl: string
   level: string
   mentor: Mentor
-  /** 0–100. */
-  progress: number
   hours: number
   students: number
   certificate: boolean
@@ -65,8 +64,17 @@ export interface Course {
 const CC0_VIDEO = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos'
 const CDN_VIDEO = 'https://cdn.jsdelivr.net/gh/mediaelement/mediaelement-files@master'
 
+/**
+ * How the demo courses are authored: a module names its lesson titles, and
+ * {@link buildLessons} expands them into real lessons. The backend sends the
+ * expanded shape, so this seed layer disappears with the demo data.
+ */
+interface CourseSeed extends Omit<Course, 'curriculum'> {
+  curriculum: { title: string; duration: string; topics: string[] }[]
+}
+
 // Demo data — replace with a request once the courses API exists.
-export const courses: Course[] = [
+const courseSeeds: CourseSeed[] = [
   {
     id: 'system-design',
     title: 'Tizim dizayni',
@@ -79,7 +87,6 @@ export const courses: Course[] = [
       role: 'Senior Backend Engineer',
       bio: "12 yillik tajribaga ega muhandis. Milliy to'lov tizimlarida yuqori yuklamali servislarni loyihalagan.",
     },
-    progress: 62,
     hours: 18,
     students: 1250,
     certificate: true,
@@ -102,25 +109,21 @@ export const courses: Course[] = [
     curriculum: [
       {
         title: 'Kirish: tizim dizayni nima?',
-        lessons: 3,
         duration: '1 soat 15 daqiqa',
         topics: ['Talablarni yig\'ish', 'Cheklovlarni baholash', 'Birinchi diagramma'],
       },
       {
         title: 'Masshtablash strategiyalari',
-        lessons: 5,
         duration: '2 soat 30 daqiqa',
         topics: ['Yuk balanslash', 'Shardlash', 'Replikatsiya', 'Xatoliklarga chidamlilik', 'Amaliyot'],
       },
       {
         title: 'Keshlash va navbatlar',
-        lessons: 4,
         duration: '2 soat',
         topics: ['Kesh qatlamlari', 'Invalidatsiya', 'Xabar navbatlari', 'Amaliyot'],
       },
       {
         title: 'Monitoring va ishonchlilik',
-        lessons: 4,
         duration: '1 soat 45 daqiqa',
         topics: ['Metrikalar', 'Loglar', 'Ogohlantirishlar', 'Post-mortem'],
       },
@@ -155,7 +158,6 @@ export const courses: Course[] = [
       role: 'Lead Frontend Engineer',
       bio: "8 yillik tajribaga ega mutaxassis. Yirik marketplace interfeyslarini va ichki dizayn tizimlarini ishlab chiqqan.",
     },
-    progress: 38,
     hours: 26,
     students: 3420,
     certificate: true,
@@ -178,25 +180,21 @@ export const courses: Course[] = [
     curriculum: [
       {
         title: 'Kirish: React nima?',
-        lessons: 3,
         duration: '1 soat 15 daqiqa',
         topics: ['Komponent tushunchasi', 'JSX', 'Birinchi loyiha'],
       },
       {
         title: 'TypeScript bilan ishlash',
-        lessons: 5,
         duration: '2 soat 30 daqiqa',
         topics: ['Turlar', 'Generiklar', 'Props tiplari', 'Utility turlar', 'Amaliyot'],
       },
       {
         title: 'Holat boshqaruvi',
-        lessons: 6,
         duration: '3 soat',
         topics: ['useState', 'useReducer', 'Kontekst', 'Zustand', 'React Query', 'Amaliyot'],
       },
       {
         title: 'Testlar va yakuniy loyiha',
-        lessons: 4,
         duration: '2 soat 10 daqiqa',
         topics: ['Testing Library', 'Mocklar', 'CI', 'Portfolio himoyasi'],
       },
@@ -231,7 +229,6 @@ export const courses: Course[] = [
       role: 'Data Scientist',
       bio: "10 yillik tajribaga ega mutaxassis. Bank va telekom sohalarida bashoratli modellar qurgan.",
     },
-    progress: 12,
     hours: 22,
     students: 850,
     certificate: true,
@@ -254,25 +251,21 @@ export const courses: Course[] = [
     curriculum: [
       {
         title: 'Kirish: Data Science nima?',
-        lessons: 3,
         duration: '1 soat 20 daqiqa',
         topics: ['Soha haqida', 'Vositalar', 'Muhitni sozlash'],
       },
       {
         title: "Ma'lumotlarni tozalash",
-        lessons: 5,
         duration: '2 soat 30 daqiqa',
         topics: ['Pandas asoslari', "Yo'q qiymatlar", 'Dublikatlar', 'Birlashtirish', 'Amaliyot'],
       },
       {
         title: 'Vizualizatsiya',
-        lessons: 4,
         duration: '1 soat 50 daqiqa',
         topics: ['Matplotlib', 'Seaborn', 'Grafik tanlash', 'Amaliyot'],
       },
       {
         title: 'Birinchi ML model',
-        lessons: 5,
         duration: '2 soat 40 daqiqa',
         topics: ['Regressiya', 'Klassifikatsiya', 'Baholash', 'Overfitting', 'Yakuniy loyiha'],
       },
@@ -307,7 +300,6 @@ export const courses: Course[] = [
       role: 'Product Designer',
       bio: "9 yillik tajribaga ega dizayner. Fintech mahsulotlari uchun dizayn tizimlarini qurgan va jamoalarni o'qitgan.",
     },
-    progress: 0,
     hours: 15,
     students: 5100,
     certificate: true,
@@ -330,25 +322,21 @@ export const courses: Course[] = [
     curriculum: [
       {
         title: 'Kirish: UX nima?',
-        lessons: 3,
         duration: '1 soat',
         topics: ['UX va UI farqi', 'Jarayon', 'Vositalar'],
       },
       {
         title: 'Foydalanuvchi tadqiqoti',
-        lessons: 4,
         duration: '1 soat 40 daqiqa',
         topics: ['Intervyu', 'Personalar', 'Foydalanuvchi yo\'li', 'Amaliyot'],
       },
       {
         title: 'Figma va prototiplar',
-        lessons: 5,
         duration: '2 soat 20 daqiqa',
         topics: ['Auto layout', 'Komponentlar', 'Variantlar', 'Prototip', 'Amaliyot'],
       },
       {
         title: 'Dizayn tizimi va portfolio',
-        lessons: 4,
         duration: '2 soat',
         topics: ['Tokenlar', 'Kutubxona', 'Hujjatlashtirish', 'Himoya'],
       },
@@ -373,12 +361,38 @@ export const courses: Course[] = [
   },
 ]
 
+// Every lesson reuses the course intro clip: the studio has not shot the real
+// ones yet, and the player only needs a video long enough to watch to the end.
+export const courses: Course[] = courseSeeds.map((seed) => ({
+  ...seed,
+  curriculum: seed.curriculum.map((module, index) => ({
+    title: module.title,
+    duration: module.duration,
+    examId: `exam-${index + 1}`,
+    lessons: buildLessons(index, seed.videoUrl, module.topics),
+  })),
+}))
+
 /** Chip order for the catalogue filter, derived so new courses show up on their own. */
 export const courseCategories = Array.from(new Set(courses.map((course) => course.category)))
 
 /** Single source of truth for the lesson count — the curriculum itself. */
 export function lessonCount(course: Course) {
-  return course.curriculum.reduce((total, module) => total + module.lessons, 0)
+  return course.curriculum.reduce((total, module) => total + module.lessons.length, 0)
+}
+
+/** Every lesson of a course in playing order, flattened out of its modules. */
+export function allLessons(course: Course) {
+  return course.curriculum.flatMap((module) => module.lessons)
+}
+
+/** Finds a lesson and the module it belongs to. */
+export function findLesson(course: Course, lessonId: string) {
+  for (const [moduleIndex, module] of course.curriculum.entries()) {
+    const lesson = module.lessons.find((item) => item.id === lessonId)
+    if (lesson) return { lesson, module, moduleIndex }
+  }
+  return null
 }
 
 /** Mean review score, rounded to one decimal. Zero when nobody has reviewed yet. */

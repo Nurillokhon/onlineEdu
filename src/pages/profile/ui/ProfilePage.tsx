@@ -1,5 +1,6 @@
 import { useAuth, useProfileStatsQuery } from "@/entities/user";
 import { courses } from "@/entities/course";
+import { useCourseProgressMap } from "@/entities/enrollment";
 import { Spinner } from "@/shared/ui";
 import { formatPhone, toPhoneDigits } from "@/shared/lib";
 
@@ -10,6 +11,7 @@ import { formatPhone, toPhoneDigits } from "@/shared/lib";
 export function ProfilePage() {
   const { user } = useAuth();
   const { data, isLoading, isError } = useProfileStatsQuery();
+  const { progressOf } = useCourseProgressMap();
 
   const phone = user?.phone ? formatPhone(toPhoneDigits(user.phone)) : null;
 
@@ -47,20 +49,23 @@ export function ProfilePage() {
             <h3 className="font-display text-lg font-semibold text-ink">
               Kurslardagi natijalar
             </h3>
-            {courses.map((course) => (
-              <div key={course.id} className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-ink">{course.title}</span>
-                  <span className="text-ink-muted">{course.progress}%</span>
+            {courses.map((course) => {
+              const progress = progressOf(course)
+              return (
+                <div key={course.id} className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-ink">{course.title}</span>
+                    <span className="text-ink-muted">{progress.percent}%</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-line overflow-hidden">
+                    <span
+                      className="block h-full rounded-full bg-brand"
+                      style={{ width: `${progress.percent}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="h-1.5 rounded-full bg-line overflow-hidden">
-                  <span
-                    className="block h-full rounded-full bg-brand"
-                    style={{ width: `${course.progress}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
 

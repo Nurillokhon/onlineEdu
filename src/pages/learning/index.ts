@@ -1,1 +1,5 @@
 export { LearningPage } from './ui/LearningPage'
+export { LessonPage } from './ui/LessonPage'
+export { QuizPage } from './ui/QuizPage'
+export { QuizResultPage } from './ui/QuizResultPage'
+export { CourseSuspendedPage } from './ui/CourseSuspendedPage'

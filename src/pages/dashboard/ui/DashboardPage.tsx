@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useAuth, useProfileStatsQuery } from '@/entities/user'
 import { courses } from '@/entities/course'
+import { useCourseProgressMap } from '@/entities/enrollment'
 import { paths } from '@/shared/config/routes'
 import { ClockIcon, PlayIcon } from '@/shared/ui'
+import { lessonPath } from '@/shared/config/routes'
 
 /**
  * Material 3 feed canonical layout: a responsive grid of cards that reflows
@@ -11,8 +13,9 @@ import { ClockIcon, PlayIcon } from '@/shared/ui'
 export function DashboardPage() {
   const { user } = useAuth()
   const { data } = useProfileStatsQuery()
+  const { progressOf, resumeLessonOf } = useCourseProgressMap()
 
-  const inProgress = courses.filter((course) => course.progress > 0)
+  const inProgress = courses.filter((course) => progressOf(course).completed > 0)
 
   return (
     <div className="flex flex-col gap-6">
@@ -48,7 +51,10 @@ export function DashboardPage() {
         </div>
 
         <div className="grid medium:grid-cols-2 large:grid-cols-3 gap-4">
-          {inProgress.map((course) => (
+          {inProgress.map((course) => {
+            const progress = progressOf(course)
+            const resumeId = resumeLessonOf(course.id)
+            return (
             <article
               key={course.id}
               className="rounded-2xl bg-card border border-line p-5 flex flex-col gap-4"
@@ -64,25 +70,26 @@ export function DashboardPage() {
                     <ClockIcon size={14} />
                     {course.hours} soat
                   </span>
-                  <span>{course.progress}%</span>
+                  <span>{progress.percent}%</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-line overflow-hidden">
                   <span
                     className="block h-full rounded-full bg-brand"
-                    style={{ width: `${course.progress}%` }}
+                    style={{ width: `${progress.percent}%` }}
                   />
                 </div>
               </div>
 
               <Link
-                to={paths.courses}
+                to={resumeId ? lessonPath(course.id, resumeId) : paths.courses}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand text-on-brand text-sm font-medium py-2.5 hover:bg-brand-hover transition-colors"
               >
                 <PlayIcon size={14} />
                 Davom etish
               </Link>
             </article>
-          ))}
+            )
+          })}
         </div>
       </section>
     </div>
