@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
-import { courses, findLesson } from '@/entities/course'
+/** @format */
+
+import { useState } from "react";
+import { Link, Navigate, useParams } from "react-router-dom";
+import { courses, findLesson } from "@/entities/course";
 import {
   WATCHED_THRESHOLD,
   courseProgress,
@@ -8,8 +10,13 @@ import {
   lockReason,
   useEnrollmentQuery,
   useSaveWatchedMutation,
-} from '@/entities/enrollment'
-import { courseSuspendedPath, lessonPath, paths, quizPath } from '@/shared/config/routes'
+} from "@/entities/enrollment";
+import {
+  courseSuspendedPath,
+  lessonPath,
+  paths,
+  quizPath,
+} from "@/shared/config/routes";
 import {
   AlertIcon,
   ArrowRightIcon,
@@ -17,54 +24,60 @@ import {
   LockIcon,
   RefreshIcon,
   Spinner,
-} from '@/shared/ui'
-import { useSaveIndicator } from '../lib/useSaveIndicator'
-import { CourseOutline } from './CourseOutline'
-import { LessonBreadcrumb } from './LessonBreadcrumb'
-import { CourseProgressCard } from './CourseProgressCard'
-import { LessonPlayer } from './LessonPlayer'
-import { LessonTranscript } from './LessonTranscript'
+} from "@/shared/ui";
+import { useSaveIndicator } from "../lib/useSaveIndicator";
+import { CourseOutline } from "./CourseOutline";
+import { LessonBreadcrumb } from "./LessonBreadcrumb";
+import { CourseProgressCard } from "./CourseProgressCard";
+import { LessonPlayer } from "./LessonPlayer";
+import { LessonTranscript } from "./LessonTranscript";
 
 export function LessonPage() {
-  const { courseId = '', lessonId = '' } = useParams()
-  const course = courses.find((item) => item.id === courseId)
-  const { data: enrollment, isLoading } = useEnrollmentQuery(courseId)
-  const save = useSaveWatchedMutation()
-  const saveStatus = useSaveIndicator(save.isPending)
+  const { courseId = "", lessonId = "" } = useParams();
+  const course = courses.find((item) => item.id === courseId);
+  const { data: enrollment, isLoading } = useEnrollmentQuery(courseId);
+  const save = useSaveWatchedMutation();
+  const saveStatus = useSaveIndicator(save.isPending);
   // Local reading of the gate, so the button opens the moment the learner
   // reaches the end rather than after the next autosave round-trip.
-  const [fraction, setFraction] = useState(0)
+  const [fraction, setFraction] = useState(0);
 
-  if (!course) return <Navigate to={paths.learning} replace />
+  console.log(course);
 
-  const found = findLesson(course, lessonId)
-  if (!found) return <Navigate to={paths.learning} replace />
+  if (!course) return <Navigate to={paths.learning} replace />;
+
+  const found = findLesson(course, lessonId);
+  if (!found) return <Navigate to={paths.learning} replace />;
 
   if (isLoading || !enrollment) {
-    return <Spinner label="Dars yuklanmoqda…" />
+    return <Spinner label="Dars yuklanmoqda…" />;
   }
 
-  const { lesson, module, moduleIndex } = found
-  const state = lessonStateOf(enrollment, lesson.id)
+  const { lesson, module, moduleIndex } = found;
+  const state = lessonStateOf(enrollment, lesson.id);
 
   // A suspended course keeps what the learner already finished: only the
   // lessons they had not reached yet close behind them.
-  if (enrollment.status === 'suspended' && state?.status !== 'completed') {
-    return <Navigate to={courseSuspendedPath(course.id)} replace />
+  if (enrollment.status === "suspended" && state?.status !== "completed") {
+    return <Navigate to={courseSuspendedPath(course.id)} replace />;
   }
 
-  const progress = courseProgress(course, enrollment)
-  const lessonIndex = module.lessons.findIndex((item) => item.id === lesson.id)
+  const progress = courseProgress(course, enrollment);
+  const lessonIndex = module.lessons.findIndex((item) => item.id === lesson.id);
 
   const outline = (
     <div className="flex flex-col gap-4">
       <CourseProgressCard progress={progress} />
-      <CourseOutline course={course} enrollment={enrollment} activeLessonId={lesson.id} />
+      <CourseOutline
+        course={course}
+        enrollment={enrollment}
+        activeLessonId={lesson.id}
+      />
     </div>
-  )
+  );
 
-  if (state?.status === 'locked') {
-    const open = enrollment.lessons.find((item) => item.status === 'current')
+  if (state?.status === "locked") {
+    const open = enrollment.lessons.find((item) => item.status === "current");
     return (
       <div className="flex flex-col gap-4">
         <LessonBreadcrumb courseTitle={course.title} />
@@ -73,9 +86,12 @@ export function LessonPage() {
             <span className="grid size-14 place-items-center rounded-2xl bg-brand-softer text-ink-muted">
               <LockIcon size={26} />
             </span>
-            <h1 className="font-display text-2xl font-bold text-ink">Bu dars hali yopiq</h1>
+            <h1 className="font-display text-2xl font-bold text-ink">
+              Bu dars hali yopiq
+            </h1>
             <p className="max-w-md text-ink-muted">
-              {lockReason(course, enrollment, lesson.id) ?? 'Bu dars hali ochilmagan.'}
+              {lockReason(course, enrollment, lesson.id) ??
+                "Bu dars hali ochilmagan."}
             </p>
             {open ? (
               <Link
@@ -90,13 +106,14 @@ export function LessonPage() {
           {outline}
         </div>
       </div>
-    )
+    );
   }
 
-  const videoReady = Boolean(state?.videoCompleted) || fraction >= WATCHED_THRESHOLD
-  const quizPassed = Boolean(state?.quizPassed)
-  const nextLesson = module.lessons[lessonIndex + 1] ?? null
-  const watchedPercent = Math.round(Math.max(fraction, 0) * 100)
+  const videoReady =
+    Boolean(state?.videoCompleted) || fraction >= WATCHED_THRESHOLD;
+  const quizPassed = Boolean(state?.quizPassed);
+  const nextLesson = module.lessons[lessonIndex + 1] ?? null;
+  const watchedPercent = Math.round(Math.max(fraction, 0) * 100);
 
   return (
     <div className="flex flex-col gap-4">
@@ -112,19 +129,23 @@ export function LessonPage() {
               watchedSeconds={state?.watchedSeconds ?? 0}
               completed={Boolean(state?.videoCompleted)}
               onSave={(payload) =>
-                save.mutate({ courseId: course.id, lessonId: lesson.id, ...payload })
+                save.mutate({
+                  courseId: course.id,
+                  lessonId: lesson.id,
+                  ...payload,
+                })
               }
               onFractionChange={setFraction}
             />
 
             <div className="flex flex-col gap-3 p-5">
               <div className="flex min-h-5 items-center gap-2 text-xs">
-                {saveStatus === 'saving' ? (
+                {saveStatus === "saving" ? (
                   <span className="flex items-center gap-1.5 text-ink-muted">
                     <RefreshIcon size={13} />
                     Progress saqlanmoqda...
                   </span>
-                ) : saveStatus === 'saved' ? (
+                ) : saveStatus === "saved" ? (
                   <span className="flex items-center gap-1.5 text-brand-hover">
                     <CheckCircleIcon size={13} />
                     Saqlandi
@@ -142,7 +163,7 @@ export function LessonPage() {
                   </h1>
                 </div>
 
-                {enrollment.status === 'suspended' ? (
+                {enrollment.status === "suspended" ? (
                   // Read-only: offering a way forward would only lead back to
                   // the suspension screen.
                   <p className="flex items-center gap-2 rounded-xl bg-danger-soft px-4 py-2.5 text-sm text-danger">
@@ -170,17 +191,17 @@ export function LessonPage() {
         {outline}
       </div>
     </div>
-  )
+  );
 }
 
 interface LessonActionProps {
-  courseId: string
-  quizId: string
-  videoReady: boolean
-  quizPassed: boolean
-  nextLessonId: string | null
-  examId: string
-  watchedPercent: number
+  courseId: string;
+  quizId: string;
+  videoReady: boolean;
+  quizPassed: boolean;
+  nextLessonId: string | null;
+  examId: string;
+  watchedPercent: number;
 }
 
 /**
@@ -198,20 +219,25 @@ function LessonAction({
   watchedPercent,
 }: LessonActionProps) {
   const buttonClass =
-    'inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover'
+    "inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover";
 
   if (!videoReady) {
     return (
       <div className="flex flex-col items-end gap-1.5">
-        <button type="button" disabled className={`${buttonClass} cursor-not-allowed opacity-45`}>
+        <button
+          type="button"
+          disabled
+          className={`${buttonClass} cursor-not-allowed opacity-45`}
+        >
           Testni boshlash
           <ArrowRightIcon size={16} />
         </button>
         <p className="text-xs text-ink-muted">
-          Videoni oxirigacha ko'ring ({watchedPercent}% / {Math.round(WATCHED_THRESHOLD * 100)}%)
+          Videoni oxirigacha ko'ring ({watchedPercent}% /{" "}
+          {Math.round(WATCHED_THRESHOLD * 100)}%)
         </p>
       </div>
-    )
+    );
   }
 
   if (!quizPassed) {
@@ -223,16 +249,20 @@ function LessonAction({
         </Link>
         <p className="text-xs text-ink-muted">Test keyingi darsni ochadi</p>
       </div>
-    )
+    );
   }
 
   return (
     <Link
-      to={nextLessonId ? lessonPath(courseId, nextLessonId) : quizPath(courseId, examId)}
+      to={
+        nextLessonId
+          ? lessonPath(courseId, nextLessonId)
+          : quizPath(courseId, examId)
+      }
       className={buttonClass}
     >
-      {nextLessonId ? 'Keyingi dars' : 'Modul nazoratiga o‘tish'}
+      {nextLessonId ? "Keyingi dars" : "Modul nazoratiga o‘tish"}
       <ArrowRightIcon size={16} />
     </Link>
-  )
+  );
 }
