@@ -69,6 +69,20 @@ export function useQuizAttemptQuery(courseId: string, quizId: string, enabled = 
   })
 }
 
+/**
+ * The deadline of the attempt in progress, or null when none is open. Saving an
+ * answer rewrites the cached attempt; selecting it down to this one number
+ * keeps a page that only needs to know whether the clock is running from
+ * re-rendering on every answer.
+ */
+export function useAttemptDeadlineQuery(courseId: string, quizId: string) {
+  return useQuery({
+    queryKey: enrollmentKeys.attempt(courseId, quizId),
+    queryFn: () => fetchQuizAttempt(courseId, quizId),
+    select: (attempt) => (attempt && attempt.submittedAt === null ? attempt.deadline : null),
+  })
+}
+
 export function useQuizResultQuery(courseId: string, quizId: string) {
   return useQuery({
     queryKey: enrollmentKeys.result(courseId, quizId),

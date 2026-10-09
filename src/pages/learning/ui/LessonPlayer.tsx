@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { type Lesson } from '@/entities/course'
 import { WATCHED_THRESHOLD } from '@/entities/enrollment'
 import { PlayIcon } from '@/shared/ui'
@@ -32,7 +32,7 @@ const NOTICE_MS = 2600
  * This is a client-side gate. It is honest about intent, not tamper-proof: the
  * server has the final say on `completed`.
  */
-export function LessonPlayer({
+export const LessonPlayer = memo(function LessonPlayer({
   lesson,
   poster,
   watchedSeconds,
@@ -200,4 +200,4 @@ export function LessonPlayer({
       )}
     </div>
   )
-}
+})

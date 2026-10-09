@@ -20,6 +20,7 @@ export {
 export {
   enrollmentKeys,
   useAnswerQuestionMutation,
+  useAttemptDeadlineQuery,
   useEnrollmentQuery,
   useEnrollmentsQuery,
   useQuizAccessQuery,

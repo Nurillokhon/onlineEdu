@@ -2,8 +2,9 @@
 
 import { NavLink } from "react-router-dom";
 import { MdIconButton } from "@/shared/ui/material/icon-button";
-import { MenuIcon, LogoutIcon } from "@/shared/ui";
+import { MenuIcon } from "@/shared/ui";
 import { useAuth } from "@/entities/user";
+import { LogoutButton } from "./LogoutButton";
 import { destinations } from "./navigation";
 
 interface SidebarProps {
@@ -11,7 +12,12 @@ interface SidebarProps {
   onToggle: () => void;
   /** Called after a destination is picked, so the overlay can close itself. */
   onNavigate: () => void;
-  onLogout: () => void;
+}
+
+/** True when the address bar already shows exactly this destination. */
+function isCurrentUrl(to: string) {
+  const { pathname, search, hash } = window.location;
+  return pathname === to && search === "" && hash === "";
 }
 
 /**
@@ -19,12 +25,7 @@ interface SidebarProps {
  * the menu expands the rail into a drawer — the only navigation surface in the
  * app, so it also carries the account row.
  */
-export function Sidebar({
-  expanded,
-  onToggle,
-  onNavigate,
-  onLogout,
-}: SidebarProps) {
+export function Sidebar({ expanded, onToggle, onNavigate }: SidebarProps) {
   const { user } = useAuth();
 
   return (
@@ -57,7 +58,12 @@ export function Sidebar({
           <NavLink
             key={item.to}
             to={item.to}
-            onClick={onNavigate}
+            onClick={(event) => {
+              // Already there: navigating again would change nothing on
+              // screen, yet re-render every component that reads the route.
+              if (isCurrentUrl(item.to)) event.preventDefault();
+              onNavigate();
+            }}
             aria-label={item.label}
             className={expanded ? "block" : "flex flex-col items-center gap-1"}
           >
@@ -111,18 +117,7 @@ export function Sidebar({
           ) : null}
         </div>
 
-        <button
-          type="button"
-          onClick={onLogout}
-          className={`rounded-full text-ink-muted hover:bg-brand-softer hover:text-ink transition-colors ${
-            expanded
-              ? "h-12 px-4 flex items-center gap-3 text-sm"
-              : "h-12 flex items-center justify-center"
-          }`}
-        >
-          <LogoutIcon size={20} />
-          {expanded ? "Chiqish" : null}
-        </button>
+        <LogoutButton expanded={expanded} />
       </div>
     </div>
   );
